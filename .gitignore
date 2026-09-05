@@ -1,0 +1,28 @@
+# local planning notes (kept out of the repo on purpose)
+PLAN.md
+
+# build
+build/
+build-*/
+*.o
+*.mod
+*.smod
+*.a
+*.so
+*.dylib
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# outputs
+*.h5
+*.bin
+out/
+*.dat
+
+# editors / OS
+.DS_Store
+.vscode/
+.idea/
