@@ -1,0 +1,6 @@
+! PRE 92, 013107 (2015) Fig. 2/4: VEDF ion-acoustic dispersion, Gamma = 10, kappa = 0.5
+&grid nx = 64, lx = 40.0 /
+&species kind = 'ion', gamma = 10, kappa = 0.5, closure = 'maxwell', transport = 'yukawa_fit', tau_model = 'ichimaru' /
+&hnc nr = 8192, rmax = 80.0 /
+&linear qmin = 0.05, qmax = 2.5, nq = 100, q_dsf = 0.5, 1.0, 1.5 /
+&output prefix = 'yukawa_g10_k0.5' /

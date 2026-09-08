@@ -1,0 +1,8 @@
+! Single-mode simulation, Gamma = 2, kappa = 0.1: probe mode 2 of a 40 a box (q = 0.314).
+! Compare the fitted frequency/damping of yukawa_g2_k0.1_mode_probe.dat with hydft_linear at the same q.
+&grid nx = 64, lx = 40.0 /
+&species kind = 'ion', gamma = 2.0, kappa = 0.1, closure = 'maxwell', transport = 'yukawa_fit', tau_model = 'ichimaru' /
+&time cfl = 0.2, tend = 200.0, iprobe = 1, idiag = 50 /
+&initial type = 'mode', amplitude = 1.0e-4, mode = 2, 0, 0 /
+&probe mode = 2, 0, 0 /
+&output prefix = 'yukawa_g2_k0.1_mode' /

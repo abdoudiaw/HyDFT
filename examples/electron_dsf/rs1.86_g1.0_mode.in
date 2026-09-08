@@ -1,0 +1,7 @@
+! Single-mode electron simulation (TFK + Hartree + c_ee), rs = 1.86, Gamma = 1: probe mode 3 (q = 0.471).
+&grid nx = 64, lx = 40.0 /
+&species kind = 'electron', rs = 1.86, gamma = 1.0, closure = 'newtonian', transport = 'constant', eta = 0.15 /
+&time cfl = 0.2, tend = 100.0, iprobe = 1, idiag = 50 /
+&initial type = 'mode', amplitude = 1.0e-4, mode = 3, 0, 0 /
+&probe mode = 3, 0, 0 /
+&output prefix = 'electron_rs1.86_g1.0_mode' /

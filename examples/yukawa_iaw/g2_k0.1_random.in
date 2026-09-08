@@ -1,0 +1,7 @@
+! Random-noise initial condition (for S(k,w) from the density spectra), Gamma = 2, kappa = 0.1.
+&grid nx = 128, lx = 80.0 /
+&species kind = 'ion', gamma = 2.0, kappa = 0.1, closure = 'maxwell', transport = 'yukawa_fit', tau_model = 'ichimaru' /
+&time cfl = 0.3, tend = 400.0, iprobe = 2, idiag = 100, iout = 2000 /
+&initial type = 'random', amplitude = 1.0e-3, seed = 42 /
+&probe mode = 4, 0, 0 /
+&output prefix = 'yukawa_g2_k0.1_random' /

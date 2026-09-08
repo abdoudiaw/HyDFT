@@ -1,0 +1,8 @@
+! Sci. Rep. 7, 15352 (2017) Fig. 1-2: electron plasmon dispersion and DSF, rs = 1.86, Gamma = 0.7.
+! eta_l in units of n0 wp a^2 (the paper's Conti-Vignale / Stanton-Murillo interpolation is not built in yet).
+&grid nx = 64, lx = 40.0 /
+&species kind = 'electron', rs = 1.86, gamma = 0.7, terms = 'tf,gradient,hartree,ry', tfk_gamma = 0.111111111,
+         closure = 'newtonian', transport = 'constant', eta = 0.15, xi = 0.0 /
+&hnc nr = 8192, rmax = 80.0 /
+&linear qmin = 0.05, qmax = 3.0, nq = 120, omega_max = 3.0, nomega = 600, q_dsf = 0.5, 1.0, 1.5, 2.0 /
+&output prefix = 'electron_rs1.86_g0.7' /

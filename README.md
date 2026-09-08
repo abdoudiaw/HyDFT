@@ -1,9 +1,9 @@
-# ddft — viscoelastic hydrodynamics closed by dynamic density functional theory
+# HyDFT — hydrodynamic density-functional theory for strongly coupled plasmas
 
-`ddft` is a modern-Fortran (2018) code that solves the time-dependent, nonlinear
-hydrodynamic equations of strongly coupled plasmas closed by dynamic density
-functional theory (DDFT). One set of equations, one set of abstractions, covers
-both
+`HyDFT` is a modern-Fortran (2018) code that solves the time-dependent,
+nonlinear hydrodynamic equations of strongly coupled plasmas closed by dynamic
+density functional theory (DDFT). One set of equations, one set of
+abstractions, covers both
 
 * the classical **viscoelastic density-functional (VEDF)** model for ions
   [Diaw & Murillo, *Phys. Rev. E* **92**, 013107 (2015)], and
@@ -18,7 +18,25 @@ analytic results of the two papers.
 The code is organised in the spirit of
 [CaNS](https://github.com/CaNS-World/CaNS): small modules, abstract derived
 types at every physics extension point, periodic pseudo-spectral discretisation,
-a single namelist input file, plain CMake build.
+a single namelist input file, plain CMake build. MIT licensed.
+
+## Status
+
+Implemented and tested (`ctest`, 12 tests):
+
+* HNC structure (Yukawa, Coulomb, Hansen–McDonald QSP), file input of MD `S(k)`;
+* free-energy terms (classical ideal, Thomas–Fermi, Kirzhnits/vW gradient,
+  Hartree, Ramakrishnan–Yussouff correlation) with linear kernels verified
+  against finite differences of the nonlinear functional derivatives;
+* linear response: PRE Eq. 54, the electron plasmon dispersion and DSF;
+* the nonlinear solver (Newtonian and Maxwell closures, ions and electrons):
+  mass/momentum conservation to round-off, single-mode frequency and damping
+  within 1–2 % of the linear theory, driven-mode `χ(k,ω)` to 1e-5, relaxation
+  to the DDFT ground state `μ[n] + v_ext = const`.
+
+See `docs/equations.md` for the equations exactly as implemented (including
+the choices made for the relaxation time) and `docs/input.md` for the input
+reference. Examples for the papers' figures are in `examples/`.
 
 ---
 
@@ -81,7 +99,7 @@ Eliminating `Π` from the momentum equation gives the VEDF form of the paper,
 (1 + τ D_t) [ m n D_t u + ∇P − n F_tot + n ∇ δF_cor/δn ] = ∇·Π⁰,
 ```
 
-but `ddft` integrates `Π` as a state variable instead: it is equivalent, avoids
+but `HyDFT` integrates `Π` as a state variable instead: it is equivalent, avoids
 commuting `∇` with `D_t`, recovers Navier–Stokes exactly as `τ → 0`, and keeps
 the high-frequency (elastic) response for `ωτ ≫ 1`. The relaxation time is
 `ω_p τ = 3 η̄ / (1 − γμ + (4/15) E_c)` with `η̄ = (4η/3 + ξ)/(m n₀ ω_p a²)`
@@ -146,18 +164,18 @@ hydrodynamic Bloch equations; RPA `c = −βv`, `γ = 0`, `η = 0` gives Bohm–
 ## 3. Code layout
 
 ```
-src/core        kinds, params (namelist), units, grid, fft (FFTW wrapper), ops
-src/special     Fermi–Dirac integrals I_p(α), inverse of I_{1/2}
+src/core        kinds, utils, params (namelist), units, grid, fft (FFTW wrapper), spectral ops
+src/special     Gauss–Legendre, Fermi–Dirac integrals I_p(α) and inverse of I_{1/2}
 src/structure   pair potentials, OZ/HNC solver, structure sources (hnc | file)
-src/functional  abstract free-energy term + ideal, TF/TFK, Hartree, RY correlation
-src/transport   η, ξ, τ: constant | Yukawa fits | electron fits
+src/functional  abstract free-energy term + ideal, TF, gradient, Hartree, RY correlation
+src/transport   η, ξ, τ: constant | yukawa_fit (+ Ichimaru τ)
 src/closure     stress closures: newtonian | maxwell
-src/model       species, external potentials, RHS, time stepping, IC, diagnostics, I/O
+src/model       species factory, external potentials, model (RHS + RK3), IC, diagnostics, I/O, analysis
 src/linear      χ(k,ω), ω(q), S(k,ω) from the same functional/closure objects
-app/            ddft_run (simulation), ddft_linear (dispersion/DSF), ddft_hnc (structure)
+app/            hydft (simulation), hydft_linear (dispersion/DSF), hydft_hnc (structure)
 test/           ctest programs
 examples/       yukawa_iaw (PRE Figs. 2–4), electron_dsf (Sci. Rep. Figs. 1–2)
-python/         plotting
+python/         readers and plotting
 docs/           equations and input reference
 ```
 
@@ -175,7 +193,12 @@ HDF5.
 cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 ctest --test-dir build
+build/hydft_linear examples/yukawa_iaw/g2_k0.1.in     # dispersion + DSF tables
+build/hydft examples/yukawa_iaw/g2_k0.1_mode.in       # single-mode simulation
 ```
+
+Debug builds (`-DCMAKE_BUILD_TYPE=Debug`) enable bounds checking and
+floating-point traps.
 
 ## 5. References
 
