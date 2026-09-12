@@ -29,7 +29,7 @@ module hydft_params
     character(len=64)  :: terms = ''                      !< comma list: ideal, tf, gradient, hartree, ry
     real(rp) :: tfk_gamma = 1.0_rp/9.0_rp                 !< gradient-correction prefactor (1/9 Kirzhnits, 1 vW)
     character(len=16)  :: closure = 'newtonian'           !< 'newtonian' | 'maxwell'
-    character(len=16)  :: transport = 'constant'          !< 'constant' | 'yukawa_fit'
+    character(len=16)  :: transport = 'constant'          !< 'constant' | 'yukawa_fit' | 'stanton_murillo' | 'electron_fit'
     real(rp) :: eta = 0.0_rp                              !< shear viscosity / (m n0 wp a^2)
     real(rp) :: xi = 0.0_rp                               !< bulk viscosity / (m n0 wp a^2)
     real(rp) :: tau = 0.0_rp                              !< Maxwell time * wp (constant model)

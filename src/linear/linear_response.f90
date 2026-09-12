@@ -147,25 +147,26 @@ contains
   end function linear_dispersion
 
   !> Dynamic structure factor per particle, S(k,w)/n0 (units 1/wp).
+  !> Im chi is odd in w, so -Im chi/w is used: it stays finite at w = 0, where
+  !> Im chi -> -n0 eta_bar w/(m c2^2) and the Bose factor x/(1-exp(-x)) -> 1 + x/2.
   real(rp) function linear_dsf(l, k, w) result(s)
     class(linear_t), intent(in) :: l
     real(rp), intent(in) :: k, w
-    real(rp) :: imchi, x
-    imchi = aimag(l%chi(k, w))
+    real(rp) :: ratio, x
+    if (abs(w) < 1.0e-6_rp) then
+      ratio = l%n0*l%eta_bar/(l%mass*l%c2(k)**2)
+    else
+      ratio = -aimag(l%chi(k, w))/w
+    end if
     if (l%quantum) then
       x = l%beta*l%hbar*w
-      if (abs(x) < 1.0e-8_rp) then
-        s = -imchi/(pi*l%n0*x*(1.0_rp + 0.5_rp*x))   ! placeholder, refined below
-        s = -imchi/(pi*l%n0)/(x + 0.5_rp*x*x)
+      if (abs(x) < 1.0e-6_rp) then
+        s = ratio/(pi*l%n0*l%beta*l%hbar)*(1.0_rp + 0.5_rp*x)
       else
-        s = -imchi/(pi*l%n0)/(1.0_rp - exp(-x))
+        s = ratio/(pi*l%n0*l%beta*l%hbar)*x/(1.0_rp - exp(-x))
       end if
     else
-      if (abs(w) < 1.0e-300_rp) then
-        s = 0.0_rp
-      else
-        s = -imchi/(pi*l%n0*l%beta*w)
-      end if
+      s = ratio/(pi*l%n0*l%beta)
     end if
   end function linear_dsf
 

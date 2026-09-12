@@ -6,11 +6,16 @@
     disp   = read_dispersion('out_dispersion.dat')
     w, S   = read_dsf('out_dsf.dat')          # S has one column per q
 """
+import io
+import re
 import numpy as np
 
 
 def _load(path):
-    return np.loadtxt(path, comments='#')
+    # Fortran prints three-digit exponents without the 'E' (1.0-100); restore it.
+    with open(path) as f:
+        text = re.sub(r'(\d)([+-]\d{3})\b', r'\1E\2', f.read())
+    return np.loadtxt(io.StringIO(text), comments='#')
 
 
 def read_diag(path):

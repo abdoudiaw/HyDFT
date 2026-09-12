@@ -1,0 +1,8 @@
+! Sci. Rep. 7, 15352 (2017) Fig. 2(a) with the supplement's viscosity model (transport = 'electron_fit'):
+! eta_l = (4/3)(eta_CV + theta eta_SM)/(1 + theta), rs = 1.86, Gamma = 1.0.
+&grid nx = 64, lx = 40.0 /
+&species kind = 'electron', rs = 1.86, gamma = 1.0, terms = 'tf,gradient,hartree,ry', tfk_gamma = 0.111111111,
+         closure = 'newtonian', transport = 'electron_fit' /
+&hnc nr = 32768, rmax = 320.0 /
+&linear qmin = 0.02, qmax = 2.0, nq = 100, omega_max = 3.0, nomega = 600, q_dsf = 0.5, 1.0, 1.5, 2.0 /
+&output prefix = 'electron_rs1.86_g1.0_fit' /

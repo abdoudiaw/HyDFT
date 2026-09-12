@@ -64,7 +64,7 @@ contains
     type(model_t), intent(inout) :: m
     real(rp) :: mass, mom(3), ekin, fe
     call d%budgets(m, mass, mom, ekin, fe)
-    write(d%udiag,'(i9,11es18.9)') m%step, m%t, m%dt, mass, mom, ekin, fe, ekin + fe, minval(m%sp%n), maxval(m%sp%n)
+    write(d%udiag,'(i9,11es18.9e3)') m%step, m%t, m%dt, mass, mom, ekin, fe, ekin + fe, minval(m%sp%n), maxval(m%sp%n)
   end subroutine diag_write
 
   subroutine diag_probe(d, m)
@@ -73,7 +73,7 @@ contains
     complex(rp) :: a, b
     a = m%spc%mode(m%sp%n, d%probe_mode(1), d%probe_mode(2), d%probe_mode(3))/m%sp%un%n0
     b = m%spc%mode(m%sp%mom(:,:,:,1), d%probe_mode(1), d%probe_mode(2), d%probe_mode(3))
-    write(d%uprobe,'(6es18.9)') m%t, real(a), aimag(a), abs(a), real(b), aimag(b)
+    write(d%uprobe,'(6es18.9e3)') m%t, real(a), aimag(a), abs(a), real(b), aimag(b)
   end subroutine diag_probe
 
   subroutine diag_close(d)

@@ -29,3 +29,6 @@ out/
 
 # secondary builds
 build-release/
+
+# jupyter
+.ipynb_checkpoints/

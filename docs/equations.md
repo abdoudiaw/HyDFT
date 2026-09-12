@@ -58,7 +58,23 @@ With perturbations `∝ e^{i(k·r − ωt)}` and `η̄ = (4η/3 + ξ)/(m n₀ ω
 
 * `constant`: `η, ξ, τ` from the input.
 * `yukawa_fit`: `η* = 0.482/G² + 0.629/G^{0.878} + 1.88×10⁻³ G` (Bastea 2005 OCP
-  fit) at `G = Γ(1 + κ + κ²/2)e^{−κ}`; `ξ` from input.
+  fit) at `G = Γ(1 + κ + κ²/2)e^{−κ}`; `ξ` from input. MD fit, valid through the
+  viscosity minimum and at strong coupling.
+* `stanton_murillo`: effective-Boltzmann fit of Stanton & Murillo, PRE 93, 043203
+  (2016), module `src/transport/stanton_murillo.f90`:
+  `η* = 5√(3π)/(36 Γ^{5/2} K₂₂(g))`, `g = Γ √(κ² + 3Γ/(1+3Γ))` (their Eqs. 54, 75,
+  fits C22–C24 with Table IV). The module also provides `D* = √(3π)/(12Γ^{5/2}K₁₁)`,
+  `K* = 25√(3π)/(48Γ^{5/2}K₂₂)` and the binary-mixture Chapman–Enskog coefficients
+  (their Eqs. B8–B16, `sm_mixture`) for the mixture/energy-equation extensions.
+  Agrees with MD to ~10–20 % for Γ ≲ 5 and underestimates transport at strong
+  coupling (no viscosity minimum); `ξ` from input.
+* `electron_fit` (electrons): the Sci. Rep. supplement interpolation
+  `η_l* = (4/3)(η*_CV + θ η*_SM)/(1+θ)`, with Conti–Vignale
+  `η*_CV = (3r_s)^{−1/2}/(60r_s^{−3/2} + 80r_s^{−1} − 40r_s^{−2/3} + 62r_s^{−1/3})` and
+  `η*_SM` evaluated at `g = Γ a/λ_TF`, `λ_TF² = 1/(4πe² ∂n/∂μ)` (`units_t%lambda_tf`);
+  `ξ = 0`, `η = 3η_l/4`. Gives η_l ≈ 1.31 at r_s = 1.86, Γ = 1, about 20 % above the
+  supplement's Fig. 4 (see `examples/electron_dsf/electron_dsf.ipynb`); the screening
+  length entering `g` is the likely difference.
 * `tau_model = ichimaru`:
   `ω_p τ = 3Γ η̄ / (1 − γ_ad μ_ex + 4u/15)`, `u = E_c/(NkT)` from HNC,
   `μ_ex = u/3 + (Γ/9) du/dΓ` by finite difference of two extra HNC solves.
@@ -66,9 +82,7 @@ With perturbations `∝ e^{i(k·r − ωt)}` and `η̄ = (4η/3 + ξ)/(m n₀ ω
   Eq. 37 prints `3η̄`; `Γ` arises from `n k_B T` in these units), and the use of
   the excess compressibility (the full one makes the modulus vanish near Γ ≈ 2).
 
-Not built in yet: the electron viscosity interpolation (Conti–Vignale +
-Stanton–Murillo) of the Sci. Rep. supplement, and the Stanton–Murillo
-`η(Γ,κ), τ(Γ,κ)` collision-integral fits (need the `K11, K22` coefficients).
+Not built in yet: a Stanton–Murillo-based relaxation time `τ(Γ,κ)`.
 
 ## Numerics
 

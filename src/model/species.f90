@@ -146,7 +146,7 @@ contains
     call sp%fun%setup(spc)
 
     ! ---- transport and closure
-    call sp%tr%setup(p%transport, p%tau_model, p%eta, p%xi, p%tau, sp%un%gamma, sp%un%kappa, p%adiabatic_index, &
+    call sp%tr%setup(p%transport, p%tau_model, p%eta, p%xi, p%tau, sp%un, p%adiabatic_index, &
                      sp%st, p%closure == 'maxwell')
     if (verb) call sp%tr%print()
     call sp%stress%setup(p%closure, sp%tr%eta, sp%tr%xi, sp%tr%tau, sp%un%n0, spc)

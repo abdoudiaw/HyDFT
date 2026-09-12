@@ -12,7 +12,8 @@ case-insensitive.
           terms='ideal,hartree,ry'   ! default per kind: ions as shown, electrons 'tf,gradient,hartree,ry'
           tfk_gamma=0.1111           ! gradient prefactor: 1/9 Kirzhnits, 1 von Weizsäcker
           closure='newtonian'|'maxwell'
-          transport='constant'|'yukawa_fit'   eta=0 xi=0 tau=0     ! η, ξ in m n₀ ω_p a², τ in 1/ω_p
+          transport='constant'|'yukawa_fit'|'stanton_murillo'|'electron_fit'
+          eta=0 xi=0 tau=0           ! η, ξ in m n₀ ω_p a², τ in 1/ω_p (constant); see docs/equations.md
           tau_model='ichimaru'|'constant'
           adiabatic_index=1.6667
           structure='hnc'|'file'|'none'  structure_file='...'  structure_kind='s'|'c' /
@@ -35,7 +36,10 @@ Programs:
 * `hydft_hnc input.in` — standalone structure (`&hnc` namelist with
   `potential`, `gamma`, `kappa`, `rs`, `prefix`): `<prefix>_gr.dat`, `<prefix>_sk.dat`.
 
-Python: `python/hydft_io.py` reads all outputs; `plot_dispersion.py`, `plot_dsf.py`.
+Python: `python/hydft_io.py` reads all outputs; `plot_dispersion.py`, `plot_dsf.py`;
+`python/stanton_murillo.py` mirrors the Fortran transport fits (reduced and cgs units).
+Notebook: `examples/electron_dsf/electron_dsf.ipynb` runs the electron example and
+compares with Figs. 1–2 of the Sci. Rep. paper (reconstructs the supplement's η_l in Python).
 
 ## Adding a physics option
 

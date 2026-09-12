@@ -22,13 +22,16 @@ a single namelist input file, plain CMake build. MIT licensed.
 
 ## Status
 
-Implemented and tested (`ctest`, 12 tests):
+Implemented and tested (`ctest`, 13 tests):
 
 * HNC structure (Yukawa, Coulomb, Hansen–McDonald QSP), file input of MD `S(k)`;
 * free-energy terms (classical ideal, Thomas–Fermi, Kirzhnits/vW gradient,
   Hartree, Ramakrishnan–Yussouff correlation) with linear kernels verified
   against finite differences of the nonlinear functional derivatives;
 * linear response: PRE Eq. 54, the electron plasmon dispersion and DSF;
+* transport: Bastea's OCP viscosity fit, the Stanton–Murillo effective-Boltzmann
+  fits (self-diffusion, viscosity, thermal conductivity, binary mixtures) and the
+  Sci. Rep. electron viscosity interpolation (`transport = 'electron_fit'`);
 * the nonlinear solver (Newtonian and Maxwell closures, ions and electrons):
   mass/momentum conservation to round-off, single-mode frequency and damping
   within 1–2 % of the linear theory, driven-mode `χ(k,ω)` to 1e-5, relaxation
@@ -36,7 +39,8 @@ Implemented and tested (`ctest`, 12 tests):
 
 See `docs/equations.md` for the equations exactly as implemented (including
 the choices made for the relaxation time) and `docs/input.md` for the input
-reference. Examples for the papers' figures are in `examples/`.
+reference. Examples for the papers' figures are in `examples/`; `examples/electron_dsf/electron_dsf.ipynb`
+compares the electron dispersion and DSF with the Sci. Rep. figures.
 
 ---
 

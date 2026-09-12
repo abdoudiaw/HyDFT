@@ -42,7 +42,7 @@ program hydft_linear
     wc = lin%dispersion(q)
     sq = -1.0_rp
     if (allocated(sp%st%k)) sq = sp%st%s_of_k(q)
-    write(u,'(5es18.8)') q, real(wc), aimag(wc), q*sqrt(max(lin%c2(q), 0.0_rp)), sq
+    write(u,'(5es18.8e3)') q, real(wc), aimag(wc), q*sqrt(max(lin%c2(q), 0.0_rp)), sq
   end do
   close(u)
 
@@ -56,9 +56,9 @@ program hydft_linear
   dw = 2.0_rp*p%omega_max/p%nomega
   do i = 0, p%nomega
     w = -p%omega_max + dw*i
-    write(u,'(es18.8)', advance='no') w
+    write(u,'(es18.8e3)', advance='no') w
     do j = 1, size(p%q_dsf)
-      if (p%q_dsf(j) > 0.0_rp) write(u,'(es18.8)', advance='no') lin%dsf(p%q_dsf(j), w)
+      if (p%q_dsf(j) > 0.0_rp) write(u,'(es18.8e3)', advance='no') lin%dsf(p%q_dsf(j), w)
     end do
     write(u,*)
   end do

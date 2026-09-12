@@ -30,6 +30,7 @@ module hydft_units
     real(rp) :: alpha0 = 0.0_rp
     real(rp) :: cn = 0.0_rp          !< n = cn I_{1/2}(alpha)
     real(rp) :: lambda_qsp = 0.0_rp  !< electron-pair thermal de Broglie length / a
+    real(rp) :: lambda_tf = 0.0_rp   !< screening length / a: 1/sqrt(4 pi e^2 dn/dmu) (Thomas-Fermi for electrons, Debye for ions)
   contains
     procedure :: init => units_init
     procedure :: print => units_print
@@ -58,10 +59,13 @@ contains
       tf = u%hbar**2*(3.0_rp*pi*pi*u%n0)**(2.0_rp/3.0_rp)/(2.0_rp*u%mass)
       u%theta = u%kT/tf
       u%lambda_qsp = 2.0_rp*sqrt(pi*gamma/rs)
+      ! dn/dmu = beta cn I_{-1/2}(alpha0)/2  (dI_{1/2}/dalpha = I_{-1/2}/2); -> Debye length 1/sqrt(3 Gamma) classically
+      u%lambda_tf = 1.0_rp/sqrt(4.0_rp*pi*u%e2*u%beta*u%cn*0.5_rp*fd_im12(u%alpha0))
     else
       u%quantum = .false.
       u%hbar = 0.0_rp
       u%theta = huge(1.0_rp)
+      u%lambda_tf = 1.0_rp/sqrt(3.0_rp*gamma)
     end if
   end subroutine units_init
 
@@ -69,6 +73,7 @@ contains
     class(units_t), intent(in) :: u
     write(*,'(a,f10.4,a,f10.4,a,f8.4)') '  units     Gamma =', u%gamma, '  beta =', u%beta, '  kappa =', u%kappa
     if (u%quantum) write(*,'(a,f8.4,a,es10.3,a,f10.4,a,f10.4)') '            rs =', u%rs, '  hbar =', u%hbar, '  theta =', u%theta, '  alpha0 =', u%alpha0
+    if (u%quantum) write(*,'(a,f10.4)') '            lambda_TF/a =', u%lambda_tf
   end subroutine units_print
 
 end module hydft_units
